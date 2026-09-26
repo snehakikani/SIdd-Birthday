@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💭 Our Memories | __NAME__'s Birthday</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <section class="page-wrap">
+    <!-- REVEAL ONE BY ONE -->
+    <h1 class="page-title">💭 Our Memories ❤️</h1>
+    <p class="page-subtitle">Tap the button to reveal each memory ✨</p>
+
+    <div class="memory-stage">
+      <div class="memory-counter" id="memoryCounter">Memory 1 / 6 ❤️</div>
+      <div class="memory-card glass" id="memoryCard"></div>
+      <div class="btn-wrap">
+        <button class="btn btn-mint" id="memoryRevealBtn">
+          <span>✨</span><span>REVEAL NEXT MEMORY ❤️</span><span>✨</span>
+        </button>
+      </div>
+      <div class="btn-wrap">
+        <a href="quiz.html" class="btn btn-lav" id="memoriesNext" style="display:none;">
+          <span>🧩</span><span>NEXT: BIRTHDAY QUIZ</span><span>→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- FUNNY MOMENTS -->
+    <h2 class="funny-title gradient-text">__NAME__ Being __NAME__ 😂</h2>
+    <p class="page-subtitle">Swipe to flip! (click the cards)</p>
+    <div class="funny-grid" id="funnyGrid"></div>
+
+    <!-- COMPLIMENT GENERATOR -->
+    <div class="compliment-wrap">
+      <h2 class="gradient-text" style="font-size:clamp(1.6rem, 4vw, 2.2rem); margin-bottom:8px;">
+        Compliment Generator ✨
+      </h2>
+      <p style="color:var(--text-light); margin-bottom:6px;">Give __NAME__ a random compliment!</p>
+      <div class="btn-wrap" style="margin-top:20px;">
+        <button class="btn btn-peach" id="complimentBtn">
+          ✨ Give __NAME__ a Compliment ✨
+        </button>
+      </div>
+      <div class="compliment-box glass">
+        <div class="compliment-text" id="complimentText"></div>
+      </div>
+    </div>
+
+    <!-- FRIENDSHIP METER -->
+    <div class="meter-wrap glass">
+      <div class="meter-label">💖 Friendship Level</div>
+      <div class="meter-bar">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+      <div class="meter-percent gradient-text" id="meterPercent">0%</div>
+      <div class="meter-msg" id="meterMsg">100% — UNBREAKABLE ❤️</div>
+    </div>
+
+    <div class="btn-wrap" style="margin-top:50px;">
+      <a href="quiz.html" class="btn btn-big">
+        <span>🧩</span><span>NEXT: BIRTHDAY QUIZ</span><span>→</span>
+      </a>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

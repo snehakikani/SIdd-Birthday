@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎉 Happy Birthday Sidd! ❤️ (Continuous Music Mode)</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
+      background: linear-gradient(135deg, #ffe5ec 0%, #e0d4ff 50%, #fff1e6 100%);
+      font-family: 'Segoe UI', 'Poppins', sans-serif;
+    }
+    /* --- Top fixed music bar (plays ONCE in the outer page — never reloads --- */
+    .top-music {
+      position: fixed; top: 14px; right: 14px; z-index: 999999;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: 0 10px 30px rgba(162,155,254,0.25), 0 4px 10px rgba(255,154,162,0.2);
+      padding: 9px 14px 9px 12px; border-radius: 999px;
+      cursor: pointer; user-select: none; transition: transform .2s ease;
+    }
+    .top-music:hover { transform: scale(1.04); }
+    .tm-icon { font-size: 20px; display:inline-block; }
+    .tm-icon.playing { animation: bounceIcon 1s ease-in-out infinite; }
+    @keyframes bounceIcon {
+      0%,100% { transform: rotate(-6deg) scale(1); }
+      50%     { transform: rotate(8deg)  scale(1.18); }
+    }
+    .tm-text { font-weight: 700; color: #6b5bcf; font-size: 13.5px; }
+    .tm-eq { display: inline-flex; align-items: flex-end; gap: 3px; height: 18px; }
+    .tm-eq span {
+      width: 3.5px; background: linear-gradient(180deg, #ff9aa2, #a29bfe);
+      border-radius: 4px; height: 4px;
+    }
+    .tm-eq.playing span { animation: eqBar 0.9s ease-in-out infinite; }
+    .tm-eq span:nth-child(1) { animation-delay: -0.4s !important; }
+    .tm-eq span:nth-child(2) { animation-delay: -0.2s !important; }
+    .tm-eq span:nth-child(3) { animation-delay:  0s   !important; }
+    .tm-eq span:nth-child(4) { animation-delay: -0.6s !important; }
+    @keyframes eqBar {
+      0%,100% { height: 4px; }
+      50%     { height: 18px; }
+    }
+    .tm-np {
+      position: fixed; top: 60px; right: 14px; z-index: 999999;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #a29bfe; font-weight: 600; font-size: 12px;
+      padding: 5px 11px; border-radius: 14px;
+      border: 1px solid rgba(162,155,254,0.25);
+      box-shadow: 0 4px 14px rgba(162,155,254,0.15);
+      opacity: 0; transform: translateY(-6px); transition: all .3s ease;
+      pointer-events: none;
+    }
+    .tm-np.show { opacity: 1; transform: translateY(0); }
+
+    #bdayFrame {
+      position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+      width: 100%; height: 100%; border: 0; background: transparent;
+    }
+    .hint {
+      position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+      z-index: 999998;
+      background: rgba(255,255,255,0.55); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.75);
+      padding: 6px 14px; border-radius: 18px; font-size: 12px;
+      color: #806cc7; font-weight: 600;
+      box-shadow: 0 4px 14px rgba(162,155,254,0.18);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <audio id="contAudio" loop preload="auto">
+    <source src="music/birthday.mp3"                        type="audio/mpeg" />
+    <source src="music/birthday.m4a"                        type="audio/mp4"  />
+    <source src="music/AP Dhillon   Thinking Of You.m4a"    type="audio/mp4"  />
+    <source src="music/AP Dhillon  Thinking Of You.m4a"     type="audio/mp4"  />
+    <source src="music/AP Dhillon Thinking Of You.m4a"      type="audio/mp4"  />
+  </audio>
+
+  <div class="top-music" id="topMusic" title="Play/Pause Music (continuous — never stops!)">
+    <span class="tm-icon" id="tmIcon">🎵</span>
+    <span class="tm-text" id="tmText">Play Music</span>
+    <span class="tm-eq" id="tmEq">
+      <span></span><span></span><span></span><span></span>
+    </span>
+  </div>
+  <div class="tm-np" id="tmNp">Now Playing 🎵</div>
+
+  <iframe id="bdayFrame" src="index.html" title="Sidd's Birthday Adventure"></iframe>
+
+  <div class="hint">🎵 Music plays continuously across every page — never stops!</div>
+
+  <script>
+    // ---------- CONTINUOUS OUTER-FRAME AUDIO (TRULY GAPLESS, ZERO SKIP) ----------
+    const audio  = document.getElementById('contAudio');
+    const btn    = document.getElementById('topMusic');
+    const icon   = document.getElementById('tmIcon');
+    const text   = document.getElementById('tmText');
+    const eq     = document.getElementById('tmEq');
+    const np     = document.getElementById('tmNp');
+    let playing  = false;
+
+    // Let iframe inner pages NOT load their own music — we tell them: you're inside a frame!
+    try { sessionStorage.setItem('sidd_frame_mode', '1'); } catch(e) {}
+
+    function setUI(isPlaying) {
+      playing = isPlaying;
+      icon.classList.toggle('playing', isPlaying);
+      eq.classList.toggle('playing', isPlaying);
+      text.textContent = isPlaying ? 'Pause Music' : 'Play Music';
+      np.classList.toggle('show', isPlaying);
+    }
+    btn.addEventListener('click', () => {
+      if (!playing) {
+        const p = audio.play();
+        if (p && p.then) p.then(() => setUI(true)).catch(()=>{});
+      } else {
+        audio.pause();
+        setUI(false);
+      }
+    });
+
+    // Auto-start on first gesture anywhere (page or iframe inside)
+    let didStart = false;
+    function tryStartOnce() {
+      if (didStart) return;
+      didStart = true;
+      // resume saved position from previous session if available
+      try {
+        const prev = JSON.parse(sessionStorage.getItem('sidd_bday_music_v1') || 'null');
+        if (prev && prev.playing && isFinite(prev.time) && prev.time > 0) {
+          audio.currentTime = prev.time;
+          const p = audio.play();
+          if (p && p.then) p.then(() => setUI(true)).catch(()=>{});
+        }
+      } catch(e) {}
+      window.removeEventListener('click',      tryStartOnce, true);
+      window.removeEventListener('keydown',    tryStartOnce, true);
+      window.removeEventListener('touchstart', tryStartOnce, true);
+      try { document.getElementById('bdayFrame').contentWindow
+                .addEventListener('click', tryStartOnce, true); } catch(e){}
+    }
+    window.addEventListener('click',      tryStartOnce, true);
+    window.addEventListener('keydown',    tryStartOnce, true);
+    window.addEventListener('touchstart', tryStartOnce, true);
+
+    // Save position continuously so even if user opens non-frame index.html it resumes
+    setInterval(() => {
+      try {
+        sessionStorage.setItem('sidd_bday_music_v1', JSON.stringify({
+          playing: !audio.paused && !audio.ended,
+          time:    isFinite(audio.currentTime) ? audio.currentTime : 0
+        }));
+      } catch(e) {}
+    }, 400);
+
+    // ---------- TALK TO INNER PAGES (script.js buildMusicButton iframe mode) ----------
+    function syncAll() {
+      try {
+        const frame = document.getElementById('bdayFrame');
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage({
+            type:    'sidd_frame_music_sync',
+            playing: !audio.paused && !audio.ended
+          }, '*');
+        }
+      } catch(e) {}
+    }
+    audio.addEventListener('play',  syncAll);
+    audio.addEventListener('pause', syncAll);
+    audio.addEventListener('ended', syncAll);
+
+    window.addEventListener('message', (ev) => {
+      try {
+        const m = ev.data;
+        if (!m || typeof m !== 'object') return;
+        if (m.type === 'sidd_frame_music_ping') {
+          syncAll();
+        } else if (m.type === 'sidd_frame_music_toggle') {
+          if (audio.paused) {
+            const p = audio.play();
+            if (p && p.then) p.then(() => setUI(true)).catch(()=>{});
+          } else {
+            audio.pause(); setUI(false);
+          }
+          setTimeout(syncAll, 50);
+        }
+      } catch(e){}
+    });
+
+    // When iframe navigates to a new page, re-sync music state to the new page
+    document.getElementById('bdayFrame').addEventListener('load', syncAll);
+  </script>
+</body>
+</html>

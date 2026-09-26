@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💌 Secret Letter | __NAME__'s Birthday</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <section class="page-wrap letter-wrap">
+    <h1 class="page-title">💌 A Letter For __NAME__ 💌</h1>
+    <p class="page-subtitle">Click the envelope to open! ✨</p>
+
+    <div class="env-stage" id="envStage" title="Click to open 💌">
+      <div class="env-body"></div>
+      <div class="env-flap"></div>
+      <div class="env-letter">
+        <div style="font-weight:700; color:var(--pink); margin-bottom:8px;">Dear __NAME__,</div>
+        <div style="font-size:0.9rem; color:var(--text); line-height:1.6;">
+          (open to read the full message...)
+        </div>
+      </div>
+      <div class="env-seal">💌</div>
+    </div>
+
+    <div class="btn-wrap">
+      <button class="btn btn-peach" id="envOpenBtn">
+        💌 Open Secret Letter 💌
+      </button>
+    </div>
+
+    <div class="letter-full glass" id="letterFull">
+      <div class="letter-greet">Dear __NAME__,</div>
+      <div class="letter-body" id="letterBody"></div>
+      <div class="letter-sign">— With love, your friend ✨</div>
+    </div>
+
+    <div class="btn-wrap">
+      <a href="surprise.html" class="btn btn-big" id="letterNext" style="display:none; margin-top:30px;">
+        <span>🎆</span><span>FINAL SURPRISE →</span><span>✨</span>
+      </a>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    // Show next button after letter is opened
+    document.addEventListener('DOMContentLoaded', () => {
+      const env  = document.getElementById('envStage');
+      const btn  = document.getElementById('envOpenBtn');
+      const next = document.getElementById('letterNext');
+      function revealNext() {
+        setTimeout(() => { if (next) next.style.display = 'inline-flex'; }, 3000);
+      }
+      env?.addEventListener('click', revealNext);
+      btn?.addEventListener('click', revealNext);
+    });
+  </script>
+</body>
+</html>

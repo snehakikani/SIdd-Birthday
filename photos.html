@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📸 15 Moments | __NAME__'s Birthday</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <section class="page-wrap photos-wrap">
+    <h1 class="page-title">📸 __NAME_UPPER__'S 15 MOMENTS 📸</h1>
+    <p class="page-subtitle">A scrapbook of our favourite memories together ✨</p>
+
+    <!-- VERTICAL PHOTO STRIP -->
+    <div class="strip-wrap">
+      <div class="photo-strip" id="photoStrip"></div>
+    </div>
+
+    <!-- POLAROID GRID -->
+    <div class="polaroid-grid" id="polaroidGrid"></div>
+
+    <div class="btn-wrap">
+      <a href="memories.html" class="btn btn-big">
+        <span>💭</span><span>NEXT: OUR MEMORIES</span><span>→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose">&times;</button>
+    <button class="lb-nav lb-prev" id="lbPrev">&#10094;</button>
+    <div class="lb-content">
+      <img class="lb-img" id="lbImg" src="" alt="" />
+      <div class="lb-cap" id="lbCap"></div>
+    </div>
+    <button class="lb-nav lb-next" id="lbNext">&#10095;</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
